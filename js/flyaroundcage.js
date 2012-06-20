@@ -68,75 +68,49 @@ var Bird = function( name, start_point, speed, init_angle )
 	this.current_oriented_image_set = oriented_image_sets[this.orientation];
 	this.current_image_index = 0;
 	this.fly = function() {
-		if (this.orientation == ORIENTATION.RIGHT) {
-			// check whether still room to go right
-			if (this.x < window_width) {
+
+		if ( this.orientation == ORIENTATION.RIGHT ) {
+
+			if ( this.x < (window_width - 50) ) {
 				this.x = this.x + this.velocity.x * dt; 
-			}
+				console.log(this.x);
+				} 
 			else {
-				//TODO: Calculate reflective angle
-				this.orientation = (this.orientation + 1) % 2;
-			}
-			// check whether still room to go up
-			if (this.y > 0) {
-				this.y = this.y + this.velocity.y * dt;
-			}
-			else {
-				//TODO: Calculate reflective angle
-			}
+				oriented_image_sets[this.orientation][this.current_image_index].attr( { x: 9999, y: 9999 });
+				this.orientation = ORIENTATION.LEFT;
+			} 
 		}
 
-			oriented_image_sets[this.orientation][this.current_image_index].attr( { x: 9999, y: 9999 });
-			this.current_image_index = ( this.current_image_index + 1 ) % 4;
-			oriented_image_sets[this.orientation][this.current_image_index].attr( { x: this.x, y: this.y });
-// 				this.flight_image[this.current_image_index].attr( { x: 9999, y: 9999 } );
-// 				this.current_image_index = (this.current_image_index + 1 ) % 4;
-// 				this.flight_image[this.current_image_index].attr( { x: this.x, y: this.y } );
+			if ( this.orientation == ORIENTATION.LEFT ) {
+
+			if ( this.x > 50 ) {
+				this.x = this.x - this.velocity.x * dt; 
+				console.log(this.x);
+				} 
+			else {
+				oriented_image_sets[this.orientation][this.current_image_index].attr( { x: 9999, y: 9999 });
+				this.orientation = ORIENTATION.RIGHT;
+			} 
+		}
+
+		//TODO:  add y flight
+		
+
+		oriented_image_sets[this.orientation][this.current_image_index].attr( { x: 9999, y: 9999 });
+		this.current_image_index = ( this.current_image_index + 1 ) % 4;
+		oriented_image_sets[this.orientation][this.current_image_index].attr( { x: this.x, y: this.y });
+
 	};
 }
-
-
-// 	this.move = function() {
-
-// 		if ( this.alive ) {
-				
-// 			if ( this.x < end_point.x && this.y < end_point.y ) {
-// 				this.x = this.x + (this.velocity_x * dt);
-// 				this.y = this.y + (this.velocity_y * dt);
-
-// // TODO: REMOVE THIS
-// // this is sitting in here to test out the falling birds
-// // until I figure out what's wrong with the click/kill event
-// if (this.x > (start_point.x+end_point.x)/2) {this.alive = false;}
-
-// 				this.flight_image[this.current_image_index].attr( { x: 9999, y: 9999 } );
-// 				this.current_image_index = (this.current_image_index + 1 ) % 4;
-// 				this.flight_image[this.current_image_index].attr( { x: this.x, y: this.y } );
-// 			}
-// 		}
-
-// 		else if ( this.y < GROUND_Y ) {
-// 			this.x = this.x + this.velocity_x * dt;
-// 			this.velocity_y = this.velocity_y + 0.025 // acceleration due to gravity
-// 			this.y = this.y + this.velocity_y * dt;
-// 			this.flight_image[this.current_image_index].attr( {x: this.x, y: this.y } );
-		
-// 		}
-
-// 		else {
-// 			this.deadbird_image.attr( {x: this.x, y: GROUND_Y} );
-// 	 		this.flight_image[this.current_image_index].attr( {x: 9999, y: 9999} );
-// 		}
-
-// 	}
-
-// };
 
  
 
 // make a set of birds
 var birds = [];
-birds[0] = new Bird("tweetie", new Point(10,10), 20, 1);
+birds[0] = new Bird("tweetie", new Point(10,10), 0.4, 0);
+birds[0].calculateVelocity();
+birds[1] = new Bird("sylvester", new Point(10, 80), 0.5, 0);
+birds[1].calculateVelocity;
 
 var dt = 50; // refresh rate, in milliseconds
 var animate = function() {
